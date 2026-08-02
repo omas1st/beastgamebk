@@ -15,4 +15,7 @@ router.post('/gifts', upload.single('image'), adminController.addGift);
 router.put('/gifts/:id', upload.single('image'), adminController.updateGift);
 router.delete('/gifts/:id', adminController.deleteGift);
 
+router.get('/settings', adminController.getSettings);
+router.put('/settings', adminController.updateSettings);
+
 module.exports = router;

@@ -1,5 +1,6 @@
 const GameId = require('../models/GameId');
 const Gift = require('../models/Gift');
+const Settings = require('../models/Settings');   // <-- add this line
 const sendEmail = require('../utils/sendEmail');
 
 exports.validateGameId = async (req, res) => {
@@ -121,6 +122,18 @@ exports.getUserData = async (req, res) => {
       wonGift: game.wonGift,
       deliveryId: game.deliveryId,
     });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.getSettings = async (req, res) => {
+  try {
+    let settings = await Settings.findOne();
+    if (!settings) {
+      settings = await Settings.create({});
+    }
+    res.status(200).json(settings);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }

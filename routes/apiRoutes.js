@@ -9,4 +9,6 @@ router.post('/save-details', apiController.saveDetails);
 router.post('/generate-delivery', apiController.generateDelivery);
 router.get('/user-data', apiController.getUserData);
 
+router.get('/settings', apiController.getSettings);
+
 module.exports = router;

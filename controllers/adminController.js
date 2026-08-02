@@ -1,5 +1,6 @@
 const GameId = require('../models/GameId');
 const Gift = require('../models/Gift');
+const Settings = require('../models/Settings');
 const cloudinary = require('../utils/cloudinary');
 const streamifier = require('streamifier');
 
@@ -140,6 +141,36 @@ exports.deleteGift = async (req, res) => {
     const gift = await Gift.findByIdAndDelete(id);
     if (!gift) return res.status(404).json({ message: 'Gift not found' });
     res.status(200).json({ message: 'Gift deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// GET settings (returns the single settings doc, creates default if none)
+exports.getSettings = async (req, res) => {
+  try {
+    let settings = await Settings.findOne();
+    if (!settings) {
+      settings = await Settings.create({});
+    }
+    res.status(200).json(settings);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// PUT settings – update delivery links
+exports.updateSettings = async (req, res) => {
+  try {
+    const { deliveryLink1, deliveryLink2 } = req.body;
+    let settings = await Settings.findOne();
+    if (!settings) {
+      settings = new Settings({});
+    }
+    if (deliveryLink1 !== undefined) settings.deliveryLink1 = deliveryLink1;
+    if (deliveryLink2 !== undefined) settings.deliveryLink2 = deliveryLink2;
+    await settings.save();
+    res.status(200).json(settings);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
